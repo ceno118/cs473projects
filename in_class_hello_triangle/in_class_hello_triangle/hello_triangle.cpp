@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "BasicShape.hpp"
+#include "Shader.hpp"
 
 //using standard namespace means you don't need
 // to specify the namespace for applicable classes, functions, and variables.
@@ -78,83 +79,100 @@ int main () {
 
     //Variables:
     //Vertex Shader:
-    const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
+    // const char *vertexShaderSource = "#version 330 core\n"
+    // "layout (location = 0) in vec3 aPos;\n"
+    // "void main()\n"
+    // "{\n"
+    // "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    // "}\0";
 
-    const char *fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "} \n\0";
+    // const char *fragmentShaderSource = "#version 330 core\n"
+    // "out vec4 FragColor;\n"
+    // "void main()\n"
+    // "{\n"
+    // "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    // "} \n\0";
 
     //Compile shaders:
     //1. define the shader
-    unsigned int vertexShader;
-    //2. create it
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    //3. Provide the source code
-    glShaderSource(vertexShader,1,&vertexShaderSource,NULL);
-    // a. shader object
-    // b. number of elements in a string array (1 for now)
-    // c. String (or an array of strings)
-    // d. specifies an array of string lengths
+    // unsigned int vertexShader;
+    // //2. create it
+    // vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    // //3. Provide the source code
+    // glShaderSource(vertexShader,1,&vertexShaderSource,NULL);
+    // // // a. shader object
+    // // // b. number of elements in a string array (1 for now)
+    // // // c. String (or an array of strings)
+    // // // d. specifies an array of string lengths
 
-    //4. Compile
-    glCompileShader(vertexShader);
+    // // //4. Compile
+    // // glCompileShader(vertexShader);
 
-    //check if it succeeded (get the log data if it did not)
-    int  success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
+    // //check if it succeeded (get the log data if it did not)
+    // // int  success;
+    // // char infoLog[512];
+    // // glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    // // if(!success)
+    // // {
+    // //     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    // //     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    // // }
 
-    //Fragment shader, same steps
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
+    // //Fragment shader, same steps
+    // unsigned int fragmentShader;
+    // fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    // glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    // glCompileShader(fragmentShader);
 
-    //check compilation here too
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
+    // //check compilation here too
+    // glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    // if(!success)
+    // {
+    //     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    //     std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    // }
 
-    //NOW a shader program object.
-    //1. define the program
-    unsigned int shaderProgram;
-    //2. Create the program
-    shaderProgram= glCreateProgram();
-    //3. Attach your shaders to the program
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    //4. attaches the shaders to each other (matching input to outputs)
-    glLinkProgram(shaderProgram);
+    // //NOW a shader program object.
+    // //1. define the program
+    // unsigned int shaderProgram;
+    // //2. Create the program
+    // shaderProgram= glCreateProgram();
+    // //3. Attach your shaders to the program
+    // glAttachShader(shaderProgram, vertexShader);
+    // glAttachShader(shaderProgram, fragmentShader);
+    // //4. attaches the shaders to each other (matching input to outputs)
+    // glLinkProgram(shaderProgram);
 
-    glUseProgram(shaderProgram);
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    // glUseProgram(shaderProgram);
+    // glDeleteShader(vertexShader);
+    // glDeleteShader(fragmentShader);
+
+
+    Shader shaderProgram("./vertexShader.glsl", "./fragmentShader.glsl");
 
 
     //vertex data in Normalized Device Coordinates (for now)
     // x, y, and z are in the range [-1,1] (outside this range and they get clipped)
     // each vertex ordered x,y,z
-    float vertices[] {
-        -0.8f, -0.8f, 0.0f,//bottom left vertex
-        0.2f, -0.8f, 0.0f, //bottom right vertex
-        -0.3f, 0.0f, 0.0f  //top vertex
+
+    float left_eye_vertices[]{
+        -0.8f, 0.6f, 0.0f,
+        -0.6f, 0.6f, 0.0f,
+        -0.7f, 0.7f, 0.0f
     };
+
+    float right_eye_vertices[]{
+        -0.5f, 0.6f, 0.0f,
+        -0.3f, 0.6f, 0.0f,
+        -0.4f, 0.7f, 0.0f
+    };
+
+
+    // float vertices[] {
+    //     -0.8f, -0.8f, 0.0f,//bottom left vertex
+    //     0.2f, -0.8f, 0.0f, //bottom right vertex
+    //     -0.3f, 0.0f, 0.0f  //top vertex
+    // };
 
     float rect_vertices[] {
          0.9f,  0.9f, 0.0f,  // top right
@@ -197,8 +215,14 @@ int main () {
     AttributePointer position_attr = BuildAttribute(3,GL_FLOAT,false,3*sizeof(float),0);
     position_vao.attributes.push_back(position_attr);
 
-    BasicShape triangle;
-    triangle.Initialize(position_vao, vertices, sizeof(vertices), 3);
+    // BasicShape triangle;
+    // triangle.Initialize(position_vao, vertices, sizeof(vertices), 3);
+
+    BasicShape left_eye;
+    left_eye.Initialize(position_vao, left_eye_vertices, sizeof(left_eye_vertices), 3);
+    
+    BasicShape right_eye;
+    right_eye.Initialize(position_vao, right_eye_vertices, sizeof(left_eye_vertices), 3);
     
 
     glBindVertexArray(position_vao.id);
@@ -213,7 +237,7 @@ int main () {
 
     
 
-    glUseProgram(shaderProgram);
+    glUseProgram(shaderProgram.ID);
 
 
     
@@ -233,7 +257,8 @@ int main () {
 
         // BindVAO(position_vao,VBO,GL_ARRAY_BUFFER);
         // glDrawArrays(GL_TRIANGLES,0,3);
-        triangle.Draw(shaderProgram);
+        right_eye.Draw(shaderProgram.ID);
+        left_eye.Draw(shaderProgram.ID);
 
             
         glBindBuffer(GL_ARRAY_BUFFER,rect_VBO); 
