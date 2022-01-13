@@ -4,7 +4,7 @@ BasicShape::BasicShape(){
 
 }
 
-void BasicShape::Initialize(VAOStruct vao, float *vertex_data, int data_byte_size, int number_vertices, int prim = GL_TRIANGLES){
+void BasicShape::Initialize(VAOStruct vao, float *vertex_data, int data_byte_size, int number_vertices, int prim){
     this -> vao = vao;
 
     //create the buffer
